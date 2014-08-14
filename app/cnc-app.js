@@ -12,7 +12,13 @@ cncApp.config(function($routeProvider) {
   })
   .when('countries/:country/capital', {
     templateUrl: 'countries/country.html',
-    controller: 'countriesCtrl'
+    controller: 'countriesCtrl',
+    resolve: {
+      country: function($route) {
+        var country = $route.current.params.country;
+        return country;
+      }
+    }
   })
   .otherwise({
     redirectTo: '/'
@@ -21,6 +27,13 @@ cncApp.config(function($routeProvider) {
 
 cncApp.factory("countriesData", function($http) {
   return function() {
-    return $http.get('http://api.geonames.org/countryInfoJSON?formatted=true&lang=en&username=simcha');
+    // I don't think this cache is working
+    return $http.get('http://api.geonames.org/countryInfoJSON?formatted=true&lang=en&username=simcha', {cache: true});
   };
 });
+
+// cncApp.factory("countryData", function($http) {
+//   return function(countryName) {
+
+//   };
+// });

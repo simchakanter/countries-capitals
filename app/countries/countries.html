@@ -1,3 +1,4 @@
+<a href="#/" class="btn btn-primary">Return Home</a>
 <table class="table table-hover">
   <thead>
     <tr>
@@ -7,6 +8,7 @@
       <th>Area in km<sup>2</sup></th>
       <th>Population</th>
       <th>Continent</th>
+      <th>Details</th>
     </tr>
   </thead>
   <tbody>
@@ -17,6 +19,7 @@
       <td>{{country.areaInSqKm | number}}</td>
       <td>{{country.population | number}}</td>
       <td>{{country.continent}}</td>
+      <td><a href="#/countries/{{country.countryName}}/capital" class="btn btn-default">View</a>
     </tr>
   </tbody>
 </table>
