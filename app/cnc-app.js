@@ -10,15 +10,15 @@ cncApp.config(function($routeProvider) {
     templateUrl: 'countries/countries.html',
     controller: 'countriesCtrl'
   })
-  .when('/countries/:country/capital', {
-    templateUrl: 'countries/country.html',
-    controller: 'countriesCtrl'
-    // resolve: {
-    //   country: function($route) {
-    //     var country = $route.current.params.country;
-    //     return country;
-    //   }
-    // }
+  .when('/countries/:countryCode/capital', {
+    templateUrl: 'country/country.html',
+    controller: 'countryCtrl',
+    resolve: {
+      countryCode: function($route) {
+        var countryCode = $route.current.params.countryCode;
+        return countryCode;
+      }
+    }
   })
   .otherwise({
     redirectTo: '/'
@@ -32,8 +32,8 @@ cncApp.factory("countriesData", function($http) {
   };
 });
 
-cncApp.factory("countryData", function($route) {
-  return function() {
-    return $route.current.params.country;
+cncApp.factory("countryData", function($http) {
+  return function(countryCode) {
+    return $http.get('http://api.geonames.org/countryInfoJSON?formatted=true&lang=it&country=' + countryCode + '&username=simcha');
   };
 });
