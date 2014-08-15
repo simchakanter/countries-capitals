@@ -1,6 +1,6 @@
-cncApp.controller('countriesCtrl', function($scope, countriesData, country) {
+cncApp.controller('countriesCtrl', function($scope, countriesData, countryData) {
   countriesData().success(function(data) {
     $scope.countries = data.geonames;
-    $scope.country = country;
   });
+  $scope.country = countryData();
 });
