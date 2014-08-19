@@ -36,7 +36,7 @@ cncApp.factory("countryData", function($http) {
   return function(countryCode) {
     var country;
     // Get the core country data
-    return $http.get('http://api.geonames.org/countryInfoJSON?formatted=true&lang=it&country=' + countryCode + '&username=simcha')
+    return $http.get('http://api.geonames.org/countryInfoJSON?formatted=true&lang=en&country=' + countryCode + '&username=simcha')
     .then(function(response) {
       country = response.data.geonames[0];
       // Add the capital population

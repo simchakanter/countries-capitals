@@ -4,11 +4,11 @@
   <tbody>
     <tr>
       <td>Population of Country:</td>
-      <td>{{country.population}}</td>
+      <td>{{country.population | number}}</td>
     </tr>
     <tr>
       <td>Area</td>
-      <td>{{country.areaInSqKm}} square km</td>
+      <td>{{country.areaInSqKm | number}} km<sup>2</sup></td>
     </tr>
     <tr>
       <td>Capital</td>
@@ -16,16 +16,27 @@
     </tr>
     <tr>
       <td>Population of Capital</td>
-      <td>{{country.capitalPopulation}}</td>
+      <td>{{country.capitalPopulation | number}}</td>
     </tr>
     <tr>
       <td>Neighbors</td>
       <td>
-        <a ng-repeat="neighbour in country.neighbours" ng-href="http://localhost:8080/#/countries/{{neighbour.countryCode}}/capital">{{neighbour.countryName}}  </a>
+        <a ng-repeat="neighbour in country.neighbours" ng-href="http://localhost:8080/#/countries/{{neighbour.countryCode}}/capital">{{neighbour.countryName}}<br></a>
+      </td>
+    </tr>
+    <tr>
+      <td>Flag</td>
+      <td>
+        <img class="flag" ng-src="http://www.geonames.org/flags/x/{{countryCode.toLowerCase()}}.gif" />
+      </td>
+    </tr>
+    <tr>
+      <td>Map</td>
+      <td>
+        <img class="map" ng-src="http://www.geonames.org/img/country/250/{{countryCode}}.png" />
       </td>
     </tr>
   </tbody>
 </table>
 
-<img ng-src="http://www.geonames.org/flags/x/{{countryCode.toLowerCase()}}.gif" />
-<img id='myImage' ng-src="http://www.geonames.org/img/country/250/{{countryCode}}.png" />
+

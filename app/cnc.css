@@ -17,3 +17,13 @@
   margin: 0 auto;
   margin-bottom: 30px;
 }
+
+/* Country page */
+
+.flag {
+  max-width: 200px;
+}
+
+.map {
+  max-width: 200px;
+}
