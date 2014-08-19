@@ -34,6 +34,52 @@ cncApp.factory("countriesData", function($http) {
 
 cncApp.factory("countryData", function($http) {
   return function(countryCode) {
-    return $http.get('http://api.geonames.org/countryInfoJSON?formatted=true&lang=it&country=' + countryCode + '&username=simcha');
+    var country;
+    // Get the core country data
+    return $http.get('http://api.geonames.org/countryInfoJSON?formatted=true&lang=it&country=' + countryCode + '&username=simcha')
+    .then(function(response) {
+      country = response.data.geonames[0];
+      // Add the capital population
+      var request = {
+        q: country.capital,
+        country: country.countryCode,
+        name_equals: country.capital,
+        isNameRequired: true,
+        username: "simcha"
+      };
+      $http({
+        method: 'GET',
+        url: 'http://api.geonames.org/searchJSON',
+        params: request
+      })
+      .success(function(response) {
+        console.log("Capital response is:");
+        console.log(response);
+        country.capitalPopulation = response.geonames[0].population;
+        console.log("Updated country object");
+        console.log(country);
+      });
+      return country;
+    })
+    .then(function(country) {
+      var request = {
+        country: country.countryCode,
+        username: 'simcha'
+      };
+      $http({
+        method: 'GET',
+        url: 'http://api.geonames.org/neighboursJSON',
+        params: request
+      })
+      .success(function(response) {
+        console.log("Neighbors response is:");
+        console.log(response);
+        country.neighbours = response.geonames;
+      });
+      return country;
+    })
+    .then(function(country) {
+      return country;
+    });
   };
 });

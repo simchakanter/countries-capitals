@@ -1,6 +1,31 @@
 <a href="#/countries">Back to Countries</a>
 <h1>{{country.countryName}}</h1>
-<p>
-  This is the country page for {{country.countryName}}.
-  {{country}}
-</p>
+<table class="table">
+  <tbody>
+    <tr>
+      <td>Population of Country:</td>
+      <td>{{country.population}}</td>
+    </tr>
+    <tr>
+      <td>Area</td>
+      <td>{{country.areaInSqKm}} square km</td>
+    </tr>
+    <tr>
+      <td>Capital</td>
+      <td>{{country.capital}}</td>
+    </tr>
+    <tr>
+      <td>Population of Capital</td>
+      <td>{{country.capitalPopulation}}</td>
+    </tr>
+    <tr>
+      <td>Neighbors</td>
+      <td>
+        <a ng-repeat="neighbour in country.neighbours" ng-href="http://localhost:8080/#/countries/{{neighbour.countryCode}}/capital">{{neighbour.countryName}}  </a>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<img ng-src="http://www.geonames.org/flags/x/{{countryCode.toLowerCase()}}.gif" />
+<img id='myImage' ng-src="http://www.geonames.org/img/country/250/{{countryCode}}.png" />
