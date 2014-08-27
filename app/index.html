@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="cnc.css">
 
 </head>
-<body>
+<body ng-class="{loading: isLoading}">
   <nav class="navbar navbar-default">
     <div class="navbar-header">
       <a href="#/" class="navbar-brand site-title">Countries and Capitals</a>
@@ -16,7 +16,9 @@
   </nav>
   <div class="container">
 
-    <div ng-view></div>
+    <div class="animate-view-container">
+      <div ng-view class="animate-view"></div>
+    </div>
 
   </div>
   <script type="text/javascript" src="./bower_components/angular/angular.js"></script>
