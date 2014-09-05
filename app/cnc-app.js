@@ -26,6 +26,7 @@ cncApp.config(function($routeProvider) {
   });
 });
 
+// TODO: How do I use explicity named dependencies with .run?
 cncApp.run(function($rootScope, $location, $timeout) {
   $rootScope.$on('$routeChangeError', function() {
       $location.path("/error");
@@ -42,59 +43,75 @@ cncApp.run(function($rootScope, $location, $timeout) {
 
 cncApp.factory("countriesData", function($http) {
   return function() {
-    // I don't think this cache is working
     return $http.get('http://api.geonames.org/countryInfoJSON?formatted=true&lang=en&username=simcha', {cache: true});
   };
 });
 
-cncApp.factory("countryData", function($http) {
+cncApp.factory("capitalData", function($http, $q) {
+  return function(request, country) {
+    var d = $q.defer();
+    angular.extend(request, {
+      // TODO: look into featureCode from the API
+      q: country.capital,
+      name_equals: country.capital,
+      isNameRequired: true
+    });
+    $http({
+      method: 'GET',
+      url: 'http://api.geonames.org/searchJSON',
+      params: request
+    })
+    .success(function(response) {
+      console.log("Capital response is:");
+      console.log(response);
+      country.capitalPopulation = response.geonames[0].population;
+      console.log("Updated country object");
+      console.log(country);
+      d.resolve(country);
+    });
+    return d.promise;
+  };
+});
+
+cncApp.factory("neighboursData", function($http, $q) {
+  return function(request, country) {
+    var d = $q.defer();
+    $http({
+      method: 'GET',
+      url: 'http://api.geonames.org/neighboursJSON',
+      params: request
+    })
+    .success(function(response) {
+      console.log("Neighbors response is:");
+      console.log(response);
+      country.neighbours = response.geonames;
+      d.resolve(country);
+    });
+    return d.promise;
+  };
+});
+
+cncApp.factory("countryData", function($http, capitalData, neighboursData, $q) {
   return function(countryCode) {
     var country;
     // Get the core country data
     return $http.get('http://api.geonames.org/countryInfoJSON?formatted=true&lang=en&country=' + countryCode + '&username=simcha')
     .then(function(response) {
+      console.log(response);
       country = response.data.geonames[0];
       // Add the capital population
       var request = {
-        q: country.capital,
         country: country.countryCode,
-        name_equals: country.capital,
-        isNameRequired: true,
         username: "simcha"
       };
-      $http({
-        method: 'GET',
-        url: 'http://api.geonames.org/searchJSON',
-        params: request
-      })
-      .success(function(response) {
-        console.log("Capital response is:");
-        console.log(response);
-        country.capitalPopulation = response.geonames[0].population;
-        console.log("Updated country object");
-        console.log(country);
+      return $q.all([
+        capitalData(request, country),
+        neighboursData(request, country)
+      ])
+      .then(function() {
+        console.log(arguments);
+        return country;
       });
-      return country;
-    })
-    .then(function(country) {
-      var request = {
-        country: country.countryCode,
-        username: 'simcha'
-      };
-      $http({
-        method: 'GET',
-        url: 'http://api.geonames.org/neighboursJSON',
-        params: request
-      })
-      .success(function(response) {
-        console.log("Neighbors response is:");
-        console.log(response);
-        country.neighbours = response.geonames;
-      });
-      return country;
-    })
-    .then(function(country) {
-      return country;
     });
   };
 });
