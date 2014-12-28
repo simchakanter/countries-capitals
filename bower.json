@@ -1,9 +1,6 @@
 {
   "name": "countries-capitals",
   "version": "0.0.0",
-  "authors": [
-    "Simcha Kanter <simchakanter@gmail.com>"
-  ],
   "description": "Countries and capitals app for Thinkful",
   "moduleType": [
     "globals"
